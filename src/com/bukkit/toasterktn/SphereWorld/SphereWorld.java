@@ -11,6 +11,8 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.util.Vector;
+
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunckList;
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunkListener;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
@@ -72,6 +74,26 @@ public class SphereWorld extends JavaPlugin {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	if (command.getName().equalsIgnoreCase("sphere")) {
+	    if (!(sender instanceof Player)) {
+		log.info("This command cannot be used in the console.");
+		return true;
+	    }
+	    Player player = (Player) sender;
+	    Vector v = player.getLocation().toVector();
+	    for (Sphere s:spheres.GetSphereList()) {
+		if(s.getV().distance(v) < s.getSize())
+		{
+		    player.sendMessage("Sphere you are in has");
+		    player.sendMessage("Center x:"+ s.getX() +" y:"+ s.getY()+ "z:"+s.getZ());
+		    player.sendMessage("Radius r:"+ s.getSize());
+		    player.sendMessage("From x,z:"+ (s.getX() - s.getSize()) +","+(s.getZ() - s.getSize()));
+		    player.sendMessage("To x,z:"+ (s.getX() + s.getSize()) +","+(s.getZ() + s.getSize()));
+		}
+	    }
+	    return true;
+	}
+	
 	if (command.getName().equalsIgnoreCase("regeneratechunk")) {
 	    if (!(sender instanceof Player)) {
 		log.info("This command cannot be used in the console.");

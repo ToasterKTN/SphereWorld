@@ -1,6 +1,6 @@
 name: SphereWorld
 main: com.bukkit.toasterktn.SphereWorld.SphereWorld
-version: 0.0.1
+version: 0.1a
 commands: 
    regeneratechunk:
       description: Regen a Chunk
@@ -8,3 +8,6 @@ commands:
       aliases: 
          - regc
          - cr
+   sphere:
+      description: Shows information about the Sphere you are in
+      usage: /<command>
