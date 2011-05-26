@@ -1,8 +1,9 @@
 package com.bukkit.toasterktn.SphereWorld;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
-
 import org.bukkit.util.Vector;
 
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
@@ -54,6 +55,7 @@ public class SphereChunkProvider implements IChunkProvider {
     int[][] i = new int[32][32];
     private double[] w;
     Spheres ss;
+    private Vector vt = null;
 
     public SphereChunkProvider(World world, long i, Spheres ss) {
 	this.p = world;
@@ -229,6 +231,16 @@ public class SphereChunkProvider implements IChunkProvider {
 	return this.getOrCreateChunk(i, j);
     }
 
+    private Comparator<Sphere> COMPARATOR = new Comparator<Sphere>() 
+        {
+        // This is where the sorting happens.
+            public int compare(Sphere o1, Sphere o2)
+            {
+                return (int) ((o1.getV().distance(vt) - o1.getSize()) - (o2.getV().distance(vt) - o2.getSize()));
+            }
+        };
+
+    
     public Chunk getOrCreateChunk(int i, int j) {
 	this.j.setSeed((long) i * 341873128712L + (long) j * 132897987541L);
 	byte[] abyte = new byte['\u8000'];
@@ -246,15 +258,20 @@ public class SphereChunkProvider implements IChunkProvider {
 	Spheres ts = new Spheres();
 	ts.GetSphereList().clear();
 	for (Sphere s : ss.GetSphereList()) {
-	    if (s.getX() > i * 16 - SphereWorldConfig.maxradius - 16 && s.getX() < i * 16 + SphereWorldConfig.maxradius + 16) {
-		if (s.getZ() > j * 16 - SphereWorldConfig.maxradius - 16 && s.getZ() < j * 16 + SphereWorldConfig.maxradius + 16) {
+	    if (s.getX() > i * 16 - SphereWorldConfig.maxradius && s.getX() < i * 16 + SphereWorldConfig.maxradius + 16) {
+		if (s.getZ() > j * 16 - SphereWorldConfig.maxradius && s.getZ() < j * 16 + SphereWorldConfig.maxradius + 16) {
 		    ts.AddSphereToList(s);
 		    hassphere = true;
 		}
 	    }
 	}
 	if (hassphere) {
-	    if (SphereWorldConfig.useglass) {
+	    if (SphereWorldConfig.userandomglass && ts.GetSphereList().size() > 1) {
+		// Lets sort this to get the right random	
+		vt = new Vector((double) i * 16 + 8 , (double) 64, (double) j * 16 + 8);
+		Collections.sort(ts.GetSphereList(), COMPARATOR);
+	    }
+	    if (SphereWorldConfig.useglass || (SphereWorldConfig.userandomglass && (ts.GetSphereList().get(0).getSize() % 2 == 1))) {
 		    for (int k = 0; k < 16; ++k) {
 			for (int l = 0; l < 16; ++l) {
 			    for (int k1 = 127; k1 >= 2; --k1) {
@@ -273,7 +290,7 @@ public class SphereChunkProvider implements IChunkProvider {
 			   
 			}
 		    }
-	    } else if (SphereWorldConfig.usehalfglass) {
+	    } else if (SphereWorldConfig.usehalfglass || (SphereWorldConfig.userandomglass && (ts.GetSphereList().get(0).getSize() % 2 == 0))) {
 		 for (int k = 0; k < 16; ++k) {
 			for (int l = 0; l < 16; ++l) {
 			    for (int k1 = 127; k1 >= 64; --k1) {

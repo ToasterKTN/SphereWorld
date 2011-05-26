@@ -2,7 +2,6 @@ package com.bukkit.toasterktn.SphereWorld.Config;
 
 import java.io.File;
 
-
 public class SphereWorldConfig {
 	private static final String settingsFile = "SphereWorld.yml";
 	public static String world;
@@ -14,11 +13,14 @@ public class SphereWorldConfig {
 	public static int worldsize;
 	public static boolean useglass;
 	public static boolean usehalfglass;
+	public static boolean userandomglass;
 	public static int spherechance;
 	public static boolean usefloor;
 	public static boolean killonfloor;
 	public static boolean dobridges;
 	public static int bridgetype;
+	public static int worldseed;
+	public static int sphereseed;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -33,6 +35,7 @@ public class SphereWorldConfig {
 	     	world  = config.getString("world", "sphere");
 	     	useglass = config.getBoolean("useglass", true);
 	     	usehalfglass = config.getBoolean("usehalfglass", false);
+	     	userandomglass = config.getBoolean("userandomglass", false);
 	     	usefloor = config.getBoolean("usefloor", true);
 	     	killonfloor = config.getBoolean("killonfloor", true);
 	     	dobridges = config.getBoolean("dobridges", true);
@@ -42,6 +45,8 @@ public class SphereWorldConfig {
 	     	minradius = config.getInt("minradius", 8);
 	     	maxradius = config.getInt("maxradius", 32);
 		worldsize = config.getInt("worldsize", 2000);
+		worldseed = config.getInt("worldseed", 12345);
+		sphereseed = config.getInt("sphereseed", 12345);
 	     	spherechance = config.getInt("spherechance", 80);
 	     	bridgetype = config.getInt("bridgetype", 1);
 	     	config.save();

@@ -18,6 +18,10 @@ import com.bukkit.toasterktn.SphereWorld.Chunk.ChunkListener;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 import com.bukkit.toasterktn.SphereWorld.Player.SpherePlayerListener;
 
+// TODO Add bridges ( dobridges  / bridgetype )
+// TODO Other Shapes like Cubes ?
+// TODO seeds for Spheres and World
+
 public class SphereWorld extends JavaPlugin {
     // Starts the class
     // Links the ChunkListener
@@ -45,7 +49,7 @@ public class SphereWorld extends JavaPlugin {
 	SphereWorldConfig.initialize(getDataFolder());
 	// Force Worldload
 	if(getServer().getWorld(SphereWorldConfig.world) == null) 
-	    getServer().createWorld(SphereWorldConfig.world, Environment.NORMAL);
+	    getServer().createWorld(SphereWorldConfig.world, Environment.NORMAL, SphereWorldConfig.worldseed);
 	// Get Chunk data
 	chunkfile = new File(getDataFolder(), "chunklist.data");
 	oldchunks.ReadChunkList(chunkfile);
