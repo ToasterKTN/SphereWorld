@@ -253,7 +253,8 @@ public class SphereChunkProvider implements IChunkProvider {
 		}
 	    }
 	}
-	if (hassphere) {	   
+	if (hassphere) {
+	    if (SphereWorldConfig.useglass) {
 		    for (int k = 0; k < 16; ++k) {
 			for (int l = 0; l < 16; ++l) {
 			    for (int k1 = 127; k1 >= 2; --k1) {
@@ -271,8 +272,60 @@ public class SphereChunkProvider implements IChunkProvider {
 			    }
 			   
 			}
-	
+		    }
+	    } else if (SphereWorldConfig.usehalfglass) {
+		 for (int k = 0; k < 16; ++k) {
+			for (int l = 0; l < 16; ++l) {
+			    for (int k1 = 127; k1 >= 64; --k1) {
+				int l1 = (l * 16 + k) * 128 + k1;
+				 boolean keep = false;
+				 for (Sphere s : ts.GetSphereList()) {
+				     if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) < s.getSize()) {
+					 keep = true;
+				     }
+				 }
+				 if (!keep) abyte[l1] = (byte) 0x0;
+			    }
+			   
+			}
+		    }
+		 for (int k = 0; k < 16; ++k) {
+			for (int l = 0; l < 16; ++l) {
+			    for (int k1 = 64; k1 >= 2; --k1) {
+				int l1 = (l * 16 + k) * 128 + k1;
+				 boolean keep = false;
+				 for (Sphere s : ts.GetSphereList()) {
+				     if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) < s.getSize()) {
+					 keep = true;
+					 if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) > s.getSize() - 1.1) {
+					     abyte[l1] = (byte) 20;
+					 }
+				     }
+				 }
+				 if (!keep) abyte[l1] = (byte) 0x0;
+			    }
+			   
+			}
+		   }
+		
 	    }
+	    else {
+		for (int k = 0; k < 16; ++k) {
+			for (int l = 0; l < 16; ++l) {
+			    for (int k1 = 127; k1 >= 2; --k1) {
+				int l1 = (l * 16 + k) * 128 + k1;
+				 boolean keep = false;
+				 for (Sphere s : ts.GetSphereList()) {
+				     if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) < s.getSize()) {
+					 keep = true;
+				     }
+				 }
+				 if (!keep) abyte[l1] = (byte) 0x0;
+			    }
+			   
+			}
+		}
+	    }	  
 	} else {
 	    for (int k = 0; k < 16; ++k) {
 		for (int l = 0; l < 16; ++l) {

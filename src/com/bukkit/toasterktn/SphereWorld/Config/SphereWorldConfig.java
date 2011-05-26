@@ -13,6 +13,7 @@ public class SphereWorldConfig {
 	public static int maxradius;
 	public static int worldsize;
 	public static boolean useglass;
+	public static boolean usehalfglass;
 	public static int spherechance;
 	public static boolean usefloor;
 	public static boolean killonfloor;
@@ -31,6 +32,7 @@ public class SphereWorldConfig {
 	     	
 	     	world  = config.getString("world", "sphere");
 	     	useglass = config.getBoolean("useglass", true);
+	     	usehalfglass = config.getBoolean("usehalfglass", false);
 	     	usefloor = config.getBoolean("usefloor", true);
 	     	killonfloor = config.getBoolean("killonfloor", true);
 	     	dobridges = config.getBoolean("dobridges", true);

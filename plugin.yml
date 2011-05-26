@@ -1,6 +1,6 @@
 name: SphereWorld
 main: com.bukkit.toasterktn.SphereWorld.SphereWorld
-version: 0.1a
+version: 0.1c
 commands: 
    regeneratechunk:
       description: Regen a Chunk
