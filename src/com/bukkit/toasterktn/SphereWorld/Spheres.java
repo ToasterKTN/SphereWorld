@@ -95,9 +95,9 @@ public class Spheres implements java.io.Serializable {
 		    for (Sphere s : thisspheres) {
 			if (s.getV().distance(loc.toVector()) < SphereWorldConfig.mindist)
 			    makenew = false;
-			if (r.nextInt(100) > SphereWorldConfig.spherechance)
-			    makenew = false;
 		    }
+		    if (r.nextInt(100) > SphereWorldConfig.spherechance)
+			    makenew = false;
 		    if (makenew) {
 			// distance ok make sphere
 			Sphere ns = new Sphere();
