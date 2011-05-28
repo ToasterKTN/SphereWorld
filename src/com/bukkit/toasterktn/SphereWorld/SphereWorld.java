@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.Vector;
 
+import com.bukkit.toasterktn.SphereWorld.Block.SphereBlockListener;
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunckList;
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunkListener;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
@@ -78,6 +79,10 @@ public class SphereWorld extends JavaPlugin {
 	// Kill Players on Floor
 	if (SphereWorldConfig.killonfloor)
 	    pm.registerEvent(Event.Type.PLAYER_MOVE, new SpherePlayerListener(), Event.Priority.Normal, this);
+	// Protect Blocks if needed
+	if (SphereWorldConfig.potprotect || SphereWorldConfig.sphereprotect)
+	    pm.registerEvent(Event.Type.BLOCK_BREAK, new SphereBlockListener(this), Event.Priority.Normal, this);
+	
 	log.info("[SphereWorld] Loaded");
     }
 

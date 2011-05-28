@@ -24,6 +24,8 @@ public class SphereWorldConfig {
 	public static int sphereseed;
 	public static boolean otherworld;
 	public static int glassblock;
+	public static boolean potprotect;
+	public static boolean sphereprotect;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -55,6 +57,8 @@ public class SphereWorldConfig {
 	     	glassblock = config.getInt("glassblock", 20);
 	     	bridgetype = config.getInt("bridgetype", 1);
 	     	otherworld = config.getBoolean("otherworld", false);
+	     	potprotect = config.getBoolean("potprotect", true);
+	     	sphereprotect = config.getBoolean("sphereprotect", false);
 	     	config.save();
 	    }
 }
