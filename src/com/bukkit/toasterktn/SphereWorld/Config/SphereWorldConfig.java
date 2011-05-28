@@ -18,9 +18,12 @@ public class SphereWorldConfig {
 	public static boolean usefloor;
 	public static boolean killonfloor;
 	public static boolean dobridges;
+	public static boolean useglow;
 	public static int bridgetype;
 	public static int worldseed;
 	public static int sphereseed;
+	public static boolean otherworld;
+	public static int glassblock;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -39,6 +42,7 @@ public class SphereWorldConfig {
 	     	usefloor = config.getBoolean("usefloor", true);
 	     	killonfloor = config.getBoolean("killonfloor", true);
 	     	dobridges = config.getBoolean("dobridges", true);
+	     	useglow = config.getBoolean("useglow", false);
 	     	mindist = config.getInt("mindist", 100);
 	     	minheight = config.getInt("minheight", 34);
 	     	maxheight = config.getInt("maxheight", 96);
@@ -48,7 +52,9 @@ public class SphereWorldConfig {
 		worldseed = config.getInt("worldseed", 12345);
 		sphereseed = config.getInt("sphereseed", 12345);
 	     	spherechance = config.getInt("spherechance", 80);
+	     	glassblock = config.getInt("glassblock", 20);
 	     	bridgetype = config.getInt("bridgetype", 1);
+	     	otherworld = config.getBoolean("otherworld", false);
 	     	config.save();
 	    }
 }

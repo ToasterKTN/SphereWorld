@@ -56,6 +56,9 @@ public class ChunckList implements java.io.Serializable
 	public void AddChunkToList(Chunk chunk) {
 		thisoldchunks.add(createChunkEntry(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 	}
+	public void AddChunkToList(String worldname, int x, int z) {
+		thisoldchunks.add(createChunkEntry(worldname,x,z));
+	}
 	
 	public boolean isInChunkList(Chunk chunk) {
 		return thisoldchunks.contains(createChunkEntry(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));

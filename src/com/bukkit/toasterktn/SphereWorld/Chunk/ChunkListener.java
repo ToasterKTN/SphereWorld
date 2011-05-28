@@ -4,6 +4,8 @@ package com.bukkit.toasterktn.SphereWorld.Chunk;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.server.IChunkProvider;
+
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
@@ -13,18 +15,22 @@ import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.ChunkLoadEvent;
 
 import com.bukkit.toasterktn.SphereWorld.SphereChunkProvider;
+import com.bukkit.toasterktn.SphereWorld.OtherWorldChunkProvider;
 import com.bukkit.toasterktn.SphereWorld.SphereWorld;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 
 public class ChunkListener extends WorldListener{
 	public static SphereWorld plugin;
-	private SphereChunkProvider scp;
+	private IChunkProvider scp;
 
 	public ChunkListener(SphereWorld instance) {
 		plugin = instance;
 		World world = plugin.getServer().getWorld(SphereWorldConfig.world); 
-		
-		scp = new SphereChunkProvider(((CraftWorld)world).getHandle(), 0L, plugin.spheres);
+		if (SphereWorldConfig.otherworld) {
+		    scp = new OtherWorldChunkProvider(((CraftWorld)world).getHandle(), 0L);
+		} else {
+		    scp = new SphereChunkProvider(((CraftWorld)world).getHandle(), 0L, plugin.spheres, plugin);
+		}
 		((CraftWorld)world).getHandle().chunkProviderServer.chunkProvider = scp;
 		
 		if (plugin.oldchunks.thisoldchunks.size() < 10) {
@@ -64,6 +70,7 @@ public class ChunkListener extends WorldListener{
 		    // Test if this world is a SphereWorld..
 		    if (SphereWorldConfig.world.equalsIgnoreCase(event.getWorld().getName())) {
 			    if (!plugin.oldchunks.isInChunkList(event.getChunk())) {
+				event.getWorld().regenerateChunk(event.getChunk().getX(), event.getChunk().getZ());
 				plugin.oldchunks.AddChunkToList(event.getChunk());	
 			   }
 			

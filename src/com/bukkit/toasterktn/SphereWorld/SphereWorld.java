@@ -20,7 +20,9 @@ import com.bukkit.toasterktn.SphereWorld.Player.SpherePlayerListener;
 
 // TODO Add bridges ( dobridges  / bridgetype )
 // TODO Other Shapes like Cubes ?
-// TODO seeds for Spheres and World
+// TODO Underwaterworld
+// TODO Glowblocks into Glass
+// TODO ..
 
 public class SphereWorld extends JavaPlugin {
     // Starts the class
@@ -54,12 +56,14 @@ public class SphereWorld extends JavaPlugin {
 	chunkfile = new File(getDataFolder(), "chunklist.data");
 	oldchunks.ReadChunkList(chunkfile);
 	// Get / Create Sphere data
-	speheresfile = new File(getDataFolder(), "spheres.data");
-	spheres.ReadSphereList(speheresfile, getServer());
-	// Create Attach Listener / Attach MyShereGenerator
-	if (spheres.GetSphereList().size() < 1) {
-	    log.info("[SphereWorld] NOT Loaded");
-	    return;
+	if (!SphereWorldConfig.otherworld) {
+	    speheresfile = new File(getDataFolder(), "spheres.data");
+	    spheres.ReadSphereList(speheresfile, getServer());
+	    // Create Attach Listener / Attach MyShereGenerator
+	    if (spheres.GetSphereList().size() < 1) {
+		log.info("[SphereWorld] NOT Loaded");
+		return;
+	    }
 	}
 	chunkListener = new ChunkListener(this);
 

@@ -1,9 +1,9 @@
 package com.bukkit.toasterktn.SphereWorld;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
+
 import org.bukkit.util.Vector;
 
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
@@ -31,6 +31,7 @@ import net.minecraft.server.WorldGenReed;
 import net.minecraft.server.WorldGenerator;
 
 public class SphereChunkProvider implements IChunkProvider {
+    private SphereWorld plugin;
     private Random j;
     private NoiseGeneratorOctaves k;
     private NoiseGeneratorOctaves l;
@@ -56,8 +57,8 @@ public class SphereChunkProvider implements IChunkProvider {
     private double[] w;
     Spheres ss;
     private Vector vt = null;
-
-    public SphereChunkProvider(World world, long i, Spheres ss) {
+// checked
+    public SphereChunkProvider(World world, long i, Spheres ss, SphereWorld instance) {
 	this.p = world;
 	this.j = new Random(i);
 	this.k = new NoiseGeneratorOctaves(this.j, 16);
@@ -69,163 +70,156 @@ public class SphereChunkProvider implements IChunkProvider {
 	this.b = new NoiseGeneratorOctaves(this.j, 16);
 	this.c = new NoiseGeneratorOctaves(this.j, 8);
 	this.ss = ss;
+	this.plugin = instance;
     }
 
-    public void a(int i, int j, byte[] abyte, BiomeBase[] abiomebase, double[] adouble) {
-	byte b0 = 4;
-	byte b1 = 64;
-	int k = b0 + 1;
-	byte b2 = 17;
-	int l = b0 + 1;
+    public void a(int i1, int j1, byte[] abyte0, BiomeBase[] abiomebase, double[] ad) {
+	byte byte0 = 4;
+	int k1 = byte0 + 1;
+	byte byte1 = 64;
+	byte byte2 = 17;
+	int l1 = byte0 + 1;
+	
+	q = a(q, i1 * byte0, 0, j1 * byte0, k1, byte2, l1);
+	        for(int i2 = 0; i2 < byte0; i2++)
+	        {
+	            for(int j2 = 0; j2 < byte0; j2++)
+	            {
+	                for(int k2 = 0; k2 < 16; k2++)
+	                {
+	                    double d1 = 0.125D;
+	                    double d2 = q[((i2 + 0) * l1 + (j2 + 0)) * byte2 + (k2 + 0)];
+	                    double d3 = q[((i2 + 0) * l1 + (j2 + 1)) * byte2 + (k2 + 0)];
+	                    double d4 = q[((i2 + 1) * l1 + (j2 + 0)) * byte2 + (k2 + 0)];
+	                    double d5 = q[((i2 + 1) * l1 + (j2 + 1)) * byte2 + (k2 + 0)];
+	                    double d6 = (q[((i2 + 0) * l1 + (j2 + 0)) * byte2 + (k2 + 1)] - d2) * d1;
+	                    double d7 = (q[((i2 + 0) * l1 + (j2 + 1)) * byte2 + (k2 + 1)] - d3) * d1;
+	                    double d8 = (q[((i2 + 1) * l1 + (j2 + 0)) * byte2 + (k2 + 1)] - d4) * d1;
+	                    double d9 = (q[((i2 + 1) * l1 + (j2 + 1)) * byte2 + (k2 + 1)] - d5) * d1;
+	                    for(int l2 = 0; l2 < 8; l2++)
+	                    {
+	                        double d10 = 0.25D;
+	                        double d11 = d2;
+	                        double d12 = d3;
+	                        double d13 = (d4 - d2) * d10;
+	                        double d14 = (d5 - d3) * d10;
+	                        for(int i3 = 0; i3 < 4; i3++)
+	                        {
+	                            int j3 = i3 + i2 * 4 << 11 | 0 + j2 * 4 << 7 | k2 * 8 + l2;
+	                            char c1 = '\200';
+	                            double d15 = 0.25D;
+	                            double d16 = d11;
+	                            double d17 = (d12 - d11) * d15;
+	                            for(int k3 = 0; k3 < 4; k3++)
+	                            {
+	                        	double d18 = ad[(i2 * 4 + i3) * 16 + (j2 * 4 + k3)];
+	                                int l3 = 0;
+	                                if(k2 * 8 + l2 < byte1)
+	                                    if(d18 < 0.5D && k2 * 8 + l2 >= byte1 - 1)
+	                                        l3 = Block.ICE.id;
+	                                    else
+	                                        l3 = Block.WATER.id;
+	                                if(d16 > 0.0D)
+	                                    l3 = Block.STONE.id;
+	                                abyte0[j3] = (byte)l3;
+	                                j3 += c1;
+	                                d16 += d17;
+	                            }
 
-	this.q = this.a(this.q, i * b0, 0, j * b0, k, b2, l);
+	                            d11 += d13;
+	                            d12 += d14;
+	                        }
 
-	for (int i1 = 0; i1 < b0; ++i1) {
-	    for (int j1 = 0; j1 < b0; ++j1) {
-		for (int k1 = 0; k1 < 16; ++k1) {
-		    // da
-		    double d0 = 0.125D;
-		    double d1 = this.q[((i1 + 0) * l + j1 + 0) * b2 + k1 + 0];
-		    double d2 = this.q[((i1 + 0) * l + j1 + 1) * b2 + k1 + 0];
-		    double d3 = this.q[((i1 + 1) * l + j1 + 0) * b2 + k1 + 0];
-		    double d4 = this.q[((i1 + 1) * l + j1 + 1) * b2 + k1 + 0];
-		    double d5 = (this.q[((i1 + 0) * l + j1 + 0) * b2 + k1 + 1] - d1)
-			    * d0;
-		    double d6 = (this.q[((i1 + 0) * l + j1 + 1) * b2 + k1 + 1] - d2)
-			    * d0;
-		    double d7 = (this.q[((i1 + 1) * l + j1 + 0) * b2 + k1 + 1] - d3)
-			    * d0;
-		    double d8 = (this.q[((i1 + 1) * l + j1 + 1) * b2 + k1 + 1] - d4)
-			    * d0;
+	                        d2 += d6;
+	                        d3 += d7;
+	                        d4 += d8;
+	                        d5 += d9;
+	                    }
 
-		    for (int l1 = 0; l1 < 8; ++l1) {
-			double d9 = 0.25D;
-			double d10 = d1;
-			double d11 = d2;
-			double d12 = (d3 - d1) * d9;
-			double d13 = (d4 - d2) * d9;
+	                }
 
-			for (int i2 = 0; i2 < 4; ++i2) {
-			    int j2 = i2 + i1 * 4 << 11 | 0 + j1 * 4 << 7 | k1
-				    * 8 + l1;
-			    short short1 = 128;
-			    double d14 = 0.25D;
-			    double d15 = d10;
-			    double d16 = (d11 - d10) * d14;
+	            }
 
-			    for (int k2 = 0; k2 < 4; ++k2) {
-				double d17 = adouble[(i1 * 4 + i2) * 16 + j1
-					* 4 + k2];
-				int l2 = 0;
+	        }
+    }
 
-				if (k1 * 8 + l1 < b1) {
-				    if (d17 < 0.5D && k1 * 8 + l1 >= b1 - 1) {
-					l2 = Block.ICE.id;
-				    } else {
-					l2 = Block.STATIONARY_WATER.id;
-				    }
-				}
 
-				if (d15 > 0.0D) {
-				    l2 = Block.STONE.id;
-				}
+    public void a(int i1, int j1, byte[] abyte0, BiomeBase[] ajz) {
+	      byte byte0 = 64;
+	      double d1 = 0.03125D;
+	        r = n.a(r, i1 * 16, j1 * 16, 0.0D, 16, 16, 1, d1, d1, 1.0D);
+	        s = n.a(s, i1 * 16, 109.0134D, j1 * 16, 16, 1, 16, d1, 1.0D, d1);
+	        t = o.a(t, i1 * 16, j1 * 16, 0.0D, 16, 16, 1, d1 * 2D, d1 * 2D, d1 * 2D);
+	        for(int k1 = 0; k1 < 16; k1++)
+	        {
+	            for(int l1 = 0; l1 < 16; l1++)
+	            {
+	        	BiomeBase jz1 = ajz[k1 + l1 * 16];
+	        	boolean flag = r[k1 + l1 * 16] + j.nextDouble() * 0.20000000000000001D > 0.0D;
+	                boolean flag1 = s[k1 + l1 * 16] + j.nextDouble() * 0.20000000000000001D > 3D;
+	                int i2 = (int)(t[k1 + l1 * 16] / 3D + 3D + j.nextDouble() * 0.25D);
+	                int j2 = -1;
+	                byte byte1 = jz1.p;
+	                byte byte2 = jz1.q;
+	                for(int k2 = 127; k2 >= 0; k2--)
+	                {
+	                    int l2 = (l1 * 16 + k1) * 128 + k2;
+	                    if(k2 <= 0 + j.nextInt(5))
+	                    {
+	                        abyte0[l2] = (byte)Block.BEDROCK.id;
+	                        continue;
+	                    }
+	                    byte byte3 = abyte0[l2];
+	                    if(byte3 == 0)
+	                    {
+	                        j2 = -1;
+	                        continue;
+	                    }
+	                    if(byte3 != Block.STONE.id)
+	                        continue;
+	                    if(j2 == -1)
+	                    {
+	                        if(i2 <= 0)
+	                        {
+	                            byte1 = 0;
+	                            byte2 = (byte)Block.STONE.id;
+	                        } else
+	                        if(k2 >= byte0 - 4 && k2 <= byte0 + 1)
+	                        {
+	                            byte1 = jz1.p;
+	                            byte2 = jz1.q;
+	                            if(flag1)
+	                                byte1 = 0;
+	                            if(flag1)
+	                                byte2 = (byte)Block.GRAVEL.id;
+	                            if(flag)
+	                                byte1 = (byte)Block.SAND.id;
+	                            if(flag)
+	                                byte2 = (byte)Block.SAND.id;
+	                        }
+	                        if(k2 < byte0 && byte1 == 0)
+	                            byte1 = (byte)Block.WATER.id;
+	                        j2 = i2;
+	                        if(k2 >= byte0 - 1)
+	                            abyte0[l2] = byte1;
+	                        else
+	                            abyte0[l2] = byte2;
+	                        continue;
+	                    }
+	                    if(j2 <= 0)
+	                        continue;
+	                    j2--;
+	                    abyte0[l2] = byte2;
+	                    if(j2 == 0 && byte2 == Block.SAND.id)
+	                    {
+	                        j2 = j.nextInt(4);
+	                        byte2 = (byte)Block.SANDSTONE.id;
+	                    }
+	                }
 
-				abyte[j2] = (byte) l2;
-				j2 += short1;
-				d15 += d16;
-			    }
-
-			    d10 += d12;
-			    d11 += d13;
-			}
-
-			d1 += d5;
-			d2 += d6;
-			d3 += d7;
-			d4 += d8;
-		    }
-		}
+	            }
+	        }
 	    }
-	}
-    }
-
-    public void a(int i, int j, byte[] abyte, BiomeBase[] abiomebase) {
-	byte b0 = 64;
-	double d0 = 0.03125D;
-
-	this.r = this.n.a(this.r, (double) (i * 16), (double) (j * 16), 0.0D, 16, 16, 1, d0, d0, 1.0D);
-	this.s = this.n.a(this.s, (double) (i * 16), 109.0134D, (double) (j * 16), 16, 1, 16, d0, 1.0D, d0);
-	this.t = this.o.a(this.t, (double) (i * 16), (double) (j * 16), 0.0D, 16, 16, 1, d0 * 2.0D, d0 * 2.0D, d0 * 2.0D);
-
-	for (int k = 0; k < 16; ++k) {
-	    for (int l = 0; l < 16; ++l) {
-		BiomeBase biomebase = abiomebase[k + l * 16];
-		boolean flag = this.r[k + l * 16] + this.j.nextDouble() * 0.2D > 0.0D;
-		boolean flag1 = this.s[k + l * 16] + this.j.nextDouble() * 0.2D > 3.0D;
-		int i1 = (int) (this.t[k + l * 16] / 3.0D + 3.0D + this.j.nextDouble() * 0.25D);
-		int j1 = -1;
-		byte b1 = biomebase.o;
-		byte b2 = biomebase.p;
-
-		for (int k1 = 127; k1 >= 0; --k1) {
-		    int l1 = (l * 16 + k) * 128 + k1;
-
-		    if (k1 <= 0 + this.j.nextInt(5)) {
-			abyte[l1] = (byte) Block.BEDROCK.id;
-		    } else {
-			byte b3 = abyte[l1];
-
-			if (b3 == 0) {
-			    j1 = -1;
-			} else if (b3 == Block.STONE.id) {
-			    if (j1 == -1) {
-				if (i1 <= 0) {
-				    b1 = 0;
-				    b2 = (byte) Block.STONE.id;
-				} else if (k1 >= b0 - 4 && k1 <= b0 + 1) {
-				    b1 = biomebase.o;
-				    b2 = biomebase.p;
-				    if (flag1) {
-					b1 = 0;
-				    }
-
-				    if (flag1) {
-					b2 = (byte) Block.GRAVEL.id;
-				    }
-
-				    if (flag) {
-					b1 = (byte) Block.SAND.id;
-				    }
-
-				    if (flag) {
-					b2 = (byte) Block.SAND.id;
-				    }
-				}
-
-				if (k1 < b0 && b1 == 0) {
-				    b1 = (byte) Block.STATIONARY_WATER.id;
-				}
-
-				j1 = i1;
-				if (k1 >= b0 - 1) {
-				    abyte[l1] = b1;
-				} else {
-				    abyte[l1] = b2;
-				}
-			    } else if (j1 > 0) {
-				--j1;
-				abyte[l1] = b2;
-				if (j1 == 0 && b2 == Block.SAND.id) {
-				    j1 = this.j.nextInt(4);
-				    b2 = (byte) Block.SANDSTONE.id;
-				}
-			    }
-			}
-		    }
-		}
-	    }
-	}
-    }
 
     public Chunk getChunkAt(int i, int j) {
 	return this.getOrCreateChunk(i, j);
@@ -242,14 +236,11 @@ public class SphereChunkProvider implements IChunkProvider {
 
     
     public Chunk getOrCreateChunk(int i, int j) {
-	this.j.setSeed((long) i * 341873128712L + (long) j * 132897987541L);
+	this.j.setSeed((long) i * 0x9939f508L + (long)j * 0xf1565bd5L);
 	byte[] abyte = new byte['\u8000'];
 	Chunk chunk = new Chunk(this.p, abyte, i, j);
-
 	this.v = this.p.getWorldChunkManager().a(this.v, i * 16, j * 16, 16, 16);
-
 	double[] adouble = this.p.getWorldChunkManager().a;
-
 	this.a(i, j, abyte, this.v, adouble);
 	this.a(i, j, abyte, this.v);
 	this.u.a(this, this.p, i, j, abyte);
@@ -281,7 +272,15 @@ public class SphereChunkProvider implements IChunkProvider {
 				     if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) < s.getSize()) {
 					 keep = true;
 					 if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) > s.getSize() - 1.1) {
-					     abyte[l1] = (byte) 20;
+					    if (SphereWorldConfig.useglow) {
+						if (s.getX() == i* 16 + l || s.getZ() ==  j * 16 + k) {
+						    abyte[l1] = (byte) 89;
+						} else {
+						    abyte[l1] = (byte) SphereWorldConfig.glassblock;
+					    	}
+					    } else {
+						abyte[l1] = (byte) SphereWorldConfig.glassblock;
+					    }					     
 					 }
 				     }
 				 }
@@ -315,7 +314,15 @@ public class SphereChunkProvider implements IChunkProvider {
 				     if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) < s.getSize()) {
 					 keep = true;
 					 if (s.getV().distance(new Vector((double) i * 16 + l, (double) k1, (double) j * 16 + k)) > s.getSize() - 1.1) {
-					     abyte[l1] = (byte) 20;
+					     if (SphereWorldConfig.useglow) {
+						if (s.getX() == i* 16 + l || s.getZ() ==  j * 16 + k) {
+						    abyte[l1] = (byte) 89;
+						} else {
+						    abyte[l1] = (byte) SphereWorldConfig.glassblock;
+					    	}
+					    } else {
+						abyte[l1] = (byte) SphereWorldConfig.glassblock;
+					    }		
 					 }
 				     }
 				 }
@@ -376,381 +383,376 @@ public class SphereChunkProvider implements IChunkProvider {
 		}
 	    } 
 	}
-	    
+	  
+	
 	chunk.b();
+	plugin.oldchunks.AddChunkToList(SphereWorldConfig.world,i,j);
 	return chunk;
     }
 
-    private double[] a(double[] adouble, int i, int j, int k, int l, int i1, int j1) {
-	if (adouble == null) {
-	    adouble = new double[l * i1 * j1];
-	}
+    private double[] a(double[] ad, int i1, int j1, int k1, int l1, int i2, int j2) {
+	{
+	        if(ad == null)
+	            ad = new double[l1 * i2 * j2];
+	        double d1 = 684.41200000000003D;
+	        double d2 = 684.41200000000003D;
+	        double ad1[] = p.getWorldChunkManager().a;
+	        double ad2[] = p.getWorldChunkManager().b;
+	        g = a.a(g, i1, k1, l1, j2, 1.121D, 1.121D, 0.5D);
+	        h = b.a(h, i1, k1, l1, j2, 200D, 200D, 0.5D); 
+	        d = m.a(d, i1, j1, k1, l1, i2, j2, d1 / 80D, d2 / 160D, d1 / 80D);
+	        e = k.a(e, i1, j1, k1, l1, i2, j2, d1, d2, d1);
+	        f = l.a(f, i1, j1, k1, l1, i2, j2, d1, d2, d1);
+	        int k2 = 0;
+	        int l2 = 0;
+	        int i3 = 16 / l1;
+	        for(int j3 = 0; j3 < l1; j3++)
+	        {
+	            int k3 = j3 * i3 + i3 / 2;
+	            for(int l3 = 0; l3 < j2; l3++)
+	            {
+	                int i4 = l3 * i3 + i3 / 2;
+	                double d3 = ad1[k3 * 16 + i4];
+	                double d4 = ad2[k3 * 16 + i4] * d3;
+	                double d5 = 1.0D - d4;
+	                d5 *= d5;
+	                d5 *= d5;
+	                d5 = 1.0D - d5;
+	                double d6 = (g[l2] + 256D) / 512D;
+	                d6 *= d5;
+	                if(d6 > 1.0D)
+	                    d6 = 1.0D;
+	                double d7 = h[l2] / 8000D;
+	                if(d7 < 0.0D)
+	                    d7 = -d7 * 0.29999999999999999D;
+	                d7 = d7 * 3D - 2D;
+	                if(d7 > 1.0D) {
+	                    d7 = 1.0D;
+	                    if(d7 < -1D)
+	                        d7 = -1D;
+	                    d7 /= 1.3999999999999999D;
+	                    d7 /= 2D;
+	                    d6 = 0.0D;
+	                } else
+	                {
+	                    if(d7 > 1.0D)
+	                        d7 = 1.0D;
+	                    d7 /= 8D;
+	                }
+	                if(d6 < 0.0D)
+	                    d6 = 0.0D;
+	                d6 += 0.5D;
+	                d7 = (d7 * (double)i2) / 16D;
+	                double d8 = (double)i2 / 2D+ d7 * 4D;
+	                l2++;
+	                for(int j4 = 0; j4 < i2; j4++)
+	                {
+	                    double d9 = 0.0D;
+	                    double d10 = (((double)j4 - d8) * 12D) / d6;
+	                    if(d10 < 0.0D)
+	                        d10 *= 4D;
+	                    double d11 = e[k2] / 512D;
+	                    double d12 = f[k2] / 512D;
+	                    double d13 = (d[k2] / 10D + 1.0D) / 2D;
+	                    if(d13 < 0.0D)
+	                        d9 = d11;
+	                    else
+	                    if(d13 > 1.0D)
+	                        d9 = d12;
+	                    else
+	                        d9 = d11 + (d12 - d11) * d13;
+	                    d9 -= d10;
+	                    if(j4 > i2 - 4)
+	                    {
+	                        double d14 = (float)(j4 - (i2 - 4)) / 3F;
+	                        d9 = d9 * (1.0D - d14) + -10D * d14;
+	                    }
+	                    ad[k2] = d9;
+	                    k2++;
+	                }
+	            }
 
-	double d0 = 684.412D;
-	double d1 = 684.412D;
-	double[] adouble1 = this.p.getWorldChunkManager().a;
-	double[] adouble2 = this.p.getWorldChunkManager().b;
-
-	this.g = this.a.a(this.g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
-	this.h = this.b.a(this.h, i, k, l, j1, 200.0D, 200.0D, 0.5D);
-	this.d = this.m.a(this.d, (double) i, (double) j, (double) k, l, i1, j1, d0 / 80.0D, d1 / 160.0D, d0 / 80.0D);
-	this.e = this.k.a(this.e, (double) i, (double) j, (double) k, l, i1, j1, d0, d1, d0);
-	this.f = this.l.a(this.f, (double) i, (double) j, (double) k, l, i1, j1, d0, d1, d0);
-	int k1 = 0;
-	int l1 = 0;
-	int i2 = 16 / l;
-
-	for (int j2 = 0; j2 < l; ++j2) {
-	    int k2 = j2 * i2 + i2 / 2;
-
-	    for (int l2 = 0; l2 < j1; ++l2) {
-		int i3 = l2 * i2 + i2 / 2;
-		double d2 = adouble1[k2 * 16 + i3];
-		double d3 = adouble2[k2 * 16 + i3] * d2;
-		double d4 = 1.0D - d3;
-
-		d4 *= d4;
-		d4 *= d4;
-		d4 = 1.0D - d4;
-		double d5 = (this.g[l1] + 256.0D) / 512.0D;
-
-		d5 *= d4;
-		if (d5 > 1.0D) {
-		    d5 = 1.0D;
-		}
-
-		double d6 = this.h[l1] / 8000.0D;
-
-		if (d6 < 0.0D) {
-		    d6 = -d6 * 0.3D;
-		}
-
-		d6 = d6 * 3.0D - 2.0D;
-		if (d6 < 0.0D) {
-		    d6 /= 2.0D;
-		    if (d6 < -1.0D) {
-			d6 = -1.0D;
-		    }
-
-		    d6 /= 1.4D;
-		    d6 /= 2.0D;
-		    d5 = 0.0D;
-		} else {
-		    if (d6 > 1.0D) {
-			d6 = 1.0D;
-		    }
-
-		    d6 /= 8.0D;
-		}
-
-		if (d5 < 0.0D) {
-		    d5 = 0.0D;
-		}
-
-		d5 += 0.5D;
-		d6 = d6 * (double) i1 / 16.0D;
-		double d7 = (double) i1 / 2.0D + d6 * 4.0D;
-
-		++l1;
-
-		for (int j3 = 0; j3 < i1; ++j3) {
-		    double d8 = 0.0D;
-		    double d9 = ((double) j3 - d7) * 12.0D / d5;
-
-		    if (d9 < 0.0D) {
-			d9 *= 4.0D;
-		    }
-
-		    double d10 = this.e[k1] / 512.0D;
-		    double d11 = this.f[k1] / 512.0D;
-		    double d12 = (this.d[k1] / 10.0D + 1.0D) / 2.0D;
-
-		    if (d12 < 0.0D) {
-			d8 = d10;
-		    } else if (d12 > 1.0D) {
-			d8 = d11;
-		    } else {
-			d8 = d10 + (d11 - d10) * d12;
-		    }
-
-		    d8 -= d9;
-		    if (j3 > i1 - 4) {
-			double d13 = (double) ((float) (j3 - (i1 - 4)) / 3.0F);
-
-			d8 = d8 * (1.0D - d13) + -10.0D * d13;
-		    }
-
-		    adouble[k1] = d8;
-		    ++k1;
-		}
-	    }
-	}
-
-	return adouble;
-    }
+	        }
+	     }
+	return ad;
+    	}
+	
 
     public boolean isChunkLoaded(int i, int j) {
 	return true;
     }
 
-    public void getChunkAt(IChunkProvider ichunkprovider, int i, int j) {
-	BlockSand.a = true;
-	int k = i * 16;
-	int l = j * 16;
-	BiomeBase biomebase = this.p.getWorldChunkManager().getBiome(k + 16, l + 16);
+    public void getChunkAt(IChunkProvider cj1, int i1, int j1) {
+		BlockSand.a = true;
+		int k1 = i1 * 16;
+	        int l1 = j1 * 16;
+	        BiomeBase jz1 = this.p.getWorldChunkManager().getBiome(k1 + 16, l1 + 16);
+	        j.setSeed(p.getSeed());
+	        long l2 = (j.nextLong() / 2L) * 2L + 1L;
+	        long l3 = (j.nextLong() / 2L) * 2L + 1L;
+	        j.setSeed((long)i1 * l2 + (long)j1 * l3 ^ p.getSeed());
+	        double d1 = 0.25D;
+	        
+	        if(j.nextInt(4) == 0)
+	        {
+	            int i2 = k1 + j.nextInt(16) + 8;
+	            int l5 = j.nextInt(128);
+	            int i9 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLakes(Block.STATIONARY_WATER.id)).a(p, j, i2, l5, i9);
+	        }
+	        if(j.nextInt(8) == 0)
+	        {
+	            int j2 = k1 + j.nextInt(16) + 8;
+	            int i6 = j.nextInt(j.nextInt(120) + 8);
+	            int j9 = l1 + j.nextInt(16) + 8;
+	            if(i6 < 64 || j.nextInt(10) == 0)
+	                (new WorldGenLakes(Block.STATIONARY_LAVA.id)).a(p, j, j2, i6, j9);
+	        }
+	        for(int k2 = 0; k2 < 8; k2++)
+	        {
+	            int j6 = k1 + j.nextInt(16) + 8;
+	            int k9 = j.nextInt(128);
+	            int j12 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenDungeons()).a(p, j, j6, k9, j12);
+	        }
 
-	this.j.setSeed(this.p.getSeed());
-	long i1 = this.j.nextLong() / 2L * 2L + 1L;
-	long j1 = this.j.nextLong() / 2L * 2L + 1L;
+	        for(int i3 = 0; i3 < 10; i3++)
+	        {
+	            int k6 = k1 + j.nextInt(16);
+	            int l9 = j.nextInt(128);
+	            int k12 = l1 + j.nextInt(16);
+	            (new WorldGenClay(32)).a(p, j, k6, l9, k12);
+	        }
 
-	this.j.setSeed((long) i * i1 + (long) j * j1 ^ this.p.getSeed());
-	double d0 = 0.25D;
-	int k1;
-	int l1;
-	int i2;
+	        for(int j3 = 0; j3 < 20; j3++)
+	        {
+	            int l6 = k1 + j.nextInt(16);
+	            int i10 = j.nextInt(128);
+	            int l12 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.DIRT.id, 32)).a(p, j, l6, i10, l12);
+	        }
 
-	if (this.j.nextInt(4) == 0) {
-	    k1 = k + this.j.nextInt(16) + 8;
-	    l1 = this.j.nextInt(128);
-	    i2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenLakes(Block.STATIONARY_WATER.id)).a(this.p, this.j, k1, l1, i2);
-	}
+	        for(int k3 = 0; k3 < 10; k3++)
+	        {
+	            int i7 = k1 + j.nextInt(16);
+	            int j10 = j.nextInt(128);
+	            int i13 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.GRAVEL.id, 32)).a(p, j, i7, j10, i13);
+	        }
 
-	if (this.j.nextInt(8) == 0) {
-	    k1 = k + this.j.nextInt(16) + 8;
-	    l1 = this.j.nextInt(this.j.nextInt(120) + 8);
-	    i2 = l + this.j.nextInt(16) + 8;
-	    if (l1 < 64 || this.j.nextInt(10) == 0) {
-		(new WorldGenLakes(Block.STATIONARY_LAVA.id)).a(this.p, this.j, k1, l1, i2);
+	        for(int i4 = 0; i4 < 20; i4++)
+	        {
+	            int j7 = k1 + j.nextInt(16);
+	            int k10 = j.nextInt(128);
+	            int j13 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.COAL_ORE.id, 16)).a(p, j, j7, k10, j13);
+	        }
+
+	        for(int j4 = 0; j4 < 20; j4++)
+	        {
+	            int k7 = k1 + j.nextInt(16);
+	            int l10 = j.nextInt(64);
+	            int k13 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.IRON_ORE.id, 8)).a(p, j, k7, l10, k13);
+	        }
+
+	        for(int k4 = 0; k4 < 2; k4++)
+	        {
+	            int l7 = k1 + j.nextInt(16);
+	            int i11 = j.nextInt(32);
+	            int l13 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.GOLD_ORE.id, 8)).a(p, j, l7, i11, l13);
+	        }
+
+	        for(int l4 = 0; l4 < 8; l4++)
+	        {
+	            int i8 = k1 + j.nextInt(16);
+	            int j11 = j.nextInt(16);
+	            int i14 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.REDSTONE_ORE.id, 7)).a(p, j, i8, j11, i14);
+	        }
+
+	        for(int i5 = 0; i5 < 1; i5++)
+	        {
+	            int j8 = k1 + j.nextInt(16);
+	            int k11 = j.nextInt(16);
+	            int j14 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.DIAMOND_ORE.id, 7)).a(p, j, j8, k11, j14);
+	        }
+
+	        for(int j5 = 0; j5 < 1; j5++)
+	        {
+	            int k8 = k1 + j.nextInt(16);
+	            int l11 = j.nextInt(16) + j.nextInt(16);
+	            int k14 = l1 + j.nextInt(16);
+	            (new WorldGenMinable(Block.LAPIS_ORE.id, 6)).a(p, j, k8, l11, k14);
+	        }
+
+	        d1 = 0.5D;
+	        int k5 = (int)((c.a((double)k1 * d1, (double)l1 * d1) / 8D + j.nextDouble() * 4D + 4D) / 3D);
+	        int l8 = 0;
+	        if(j.nextInt(10) == 0)
+	            l8++;
+	        if(jz1 == BiomeBase.FOREST)
+	            l8 += k5 + 5;
+	        if(jz1 == BiomeBase.RAINFOREST)
+	            l8 += k5 + 5;
+	        if(jz1 == BiomeBase.SEASONAL_FOREST)
+	            l8 += k5 + 2;
+	        if(jz1 == BiomeBase.TAIGA)
+	            l8 += k5 + 5;
+	        if(jz1 == BiomeBase.DESERT)
+	            l8 -= 20;
+	        if(jz1 == BiomeBase.TUNDRA)
+	            l8 -= 20;
+	        if(jz1 == BiomeBase.PLAINS)
+	            l8 -= 20;
+	        for(int i12 = 0; i12 < l8; i12++)
+	        {
+	            int l14 = k1 + j.nextInt(16) + 8;
+	            int j15 = l1 + j.nextInt(16) + 8;
+	            WorldGenerator pc1 = jz1.a(j);
+	            pc1.a(1.0D, 1.0D, 1.0D);
+	            pc1.a(p, j, l14, p.getHighestBlockYAt(l14, j15), j15);
+	        }
+
+	        byte byte0 = 0;
+	        if(jz1 == BiomeBase.FOREST)
+	            byte0 = 2;
+	        if(jz1 == BiomeBase.SEASONAL_FOREST)
+	            byte0 = 4;
+	        if(jz1 == BiomeBase.TAIGA)
+	            byte0 = 2;
+	        if(jz1 == BiomeBase.PLAINS)
+	            byte0 = 3;
+	        for(int i15 = 0; i15 < byte0; i15++)
+	        {
+	            int k15 = k1 + j.nextInt(16) + 8;
+	            int l17 = j.nextInt(128);
+	            int k20 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenFlowers(Block.YELLOW_FLOWER.id)).a(p, j, k15, l17, k20);
+	        }
+
+	        
+	        // NO LONG GRASS TILL NOW
+//	        byte byte1 = 0;
+//	        if(jz1 == BiomeBase.FOREST)
+//	            byte1 = 2;
+//	        if(jz1 == BiomeBase.RAINFOREST)
+//	            byte1 = 10;
+//	        if(jz1 == BiomeBase.SEASONAL_FOREST)
+//	            byte1 = 2;
+//	        if(jz1 == BiomeBase.TAIGA)
+//	            byte1 = 1;
+//	        if(jz1 == BiomeBase.PLAINS)
+//	            byte1 = 10;
+
+//	        for(int l15 = 0; l15 < byte1; l15++)
+//	        {
+//	            byte byte2 = 1;
+//	            if(jz1 == BiomeBase.RAINFOREST && j.nextInt(3) != 0)
+//	                byte2 = 2;
+//	            int l20 = k1 + j.nextInt(16) + 8;
+//	            int k23 = j.nextInt(128);
+//	            int j25 = l1 + j.nextInt(16) + 8;
+//	            (new Wo(un.Y.bn, byte2)).a(p, j, l20, k23, j25);
+//	        }
+	        // NO DEAD BUSHES...
+//	        byte1 = 0;
+//	        if(jz1 == BiomeBase.RAINFOREST)
+//	            byte1 = 2;
+//	    
+//	        for(int i16 = 0; i16 < byte1; i16++)
+//	        {
+//	            int i18 = k1 + j.nextInt(16) + 8;
+//	            int i21 = j.nextInt(128);
+//	            int l23 = l1 + j.nextInt(16) + 8;
+//	            (new kp(un.Z.bn)).a(p, j, i18, i21, l23);
+//	        }
+
+	        if(j.nextInt(2) == 0)
+	        {
+	            int j16 = k1 + j.nextInt(16) + 8;
+	            int j18 = j.nextInt(128);
+	            int j21 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenFlowers(Block.RED_ROSE.id)).a(p, j, j16, j18, j21);
+	        }
+	        if(j.nextInt(4) == 0)
+	        {
+	            int k16 = k1 + j.nextInt(16) + 8;
+	            int k18 = j.nextInt(128);
+	            int k21 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenFlowers(Block.BROWN_MUSHROOM.id)).a(p, j, k16, k18, k21);
+	        }
+	        if(j.nextInt(8) == 0)
+	        {
+	            int l16 = k1 + j.nextInt(16) + 8;
+	            int l18 = j.nextInt(128);
+	            int l21 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenFlowers(Block.RED_MUSHROOM.id)).a(p, j, l16, l18, l21);
+	        }
+	        for(int i17 = 0; i17 < 10; i17++)
+	        {
+	            int i19 = k1 + j.nextInt(16) + 8;
+	            int i22 = j.nextInt(128);
+	            int i24 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenReed()).a(p, j, i19, i22, i24);
+	        }
+
+	        if(j.nextInt(32) == 0)
+	        {
+	            int j17 = k1 + j.nextInt(16) + 8;
+	            int j19 = j.nextInt(128);
+	            int j22 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenPumpkin()).a(p, j, j17, j19, j22);
+	        }
+	        int k17 = 0;
+	        if(jz1 == BiomeBase.DESERT)
+	            k17 += 10;
+	
+	        for(int k19 = 0; k19 < k17; k19++)
+	        {
+	            int k22 = k1 + j.nextInt(16) + 8;
+	            int j24 = j.nextInt(128);
+	            int k25 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenCactus()).a(p, j, k22, j24, k25);
+	        }
+
+	        for(int l19 = 0; l19 < 50; l19++)
+	        {
+	            int l22 = k1 + j.nextInt(16) + 8;
+	            int k24 = j.nextInt(j.nextInt(120) + 8);
+	            int l25 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLiquids(Block.WATER.id)).a(p, j, l22, k24, l25);
+	        }
+
+	        for(int i20 = 0; i20 < 20; i20++)
+	        {
+	            int i23 = k1 + j.nextInt(16) + 8;
+	            int l24 = j.nextInt(j.nextInt(j.nextInt(112) + 8) + 8);
+	            int i26 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLiquids(Block.LAVA.id)).a(p, j, i23, l24, i26);
+	        }
+
+	        w = p.getWorldChunkManager().a(w, k1 + 8, l1 + 8, 16, 16);
+	        for(int j20 = k1 + 8; j20 < k1 + 8 + 16; j20++)
+	        {
+	            for(int j23 = l1 + 8; j23 < l1 + 8 + 16; j23++)
+	            {
+	                int i25 = j20 - (k1 + 8);
+	                int j26 = j23 - (l1 + 8);
+	                int k26 = p.e(j20, j23);
+	                double d2 = w[i25 * 16 + j26] - ((double)(k26 - 64) / 64D) * 0.29999999999999999D;
+	                if(d2 < 0.5D && k26 > 0 && k26 < 128 && p.d(j20, k26, j23) && 
+	                	p.getMaterial(j20, k26 - 1, j23).isSolid() && 
+	                	p.getMaterial(j20, k26 - 1, j23) != Material.ICE)
+	                    p.setTypeId(j20, k26, j23, Block.SNOW.id);
+	            }
+
+	        }
+	        BlockSand.a = false;
 	    }
-	}
-
-	int j2;
-
-	for (k1 = 0; k1 < 8; ++k1) {
-	    l1 = k + this.j.nextInt(16) + 8;
-	    i2 = this.j.nextInt(128);
-	    j2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenDungeons()).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 10; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(128);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenClay(32)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 20; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(128);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.DIRT.id, 32)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 10; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(128);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.GRAVEL.id, 32)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 20; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(128);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.COAL_ORE.id, 16)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 20; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(64);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.IRON_ORE.id, 8)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 2; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(32);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.GOLD_ORE.id, 8)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 8; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(16);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.REDSTONE_ORE.id, 7)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 1; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(16);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.DIAMOND_ORE.id, 7)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	for (k1 = 0; k1 < 1; ++k1) {
-	    l1 = k + this.j.nextInt(16);
-	    i2 = this.j.nextInt(16) + this.j.nextInt(16);
-	    j2 = l + this.j.nextInt(16);
-	    (new WorldGenMinable(Block.LAPIS_ORE.id, 6)).a(this.p, this.j, l1, i2, j2);
-	}
-
-	d0 = 0.5D;
-	k1 = (int) ((this.c.a((double) k * d0, (double) l * d0) / 8.0D
-		+ this.j.nextDouble() * 4.0D + 4.0D) / 3.0D);
-	l1 = 0;
-	if (this.j.nextInt(10) == 0) {
-	    ++l1;
-	}
-
-	if (biomebase == BiomeBase.FOREST) {
-	    l1 += k1 + 5;
-	}
-
-	if (biomebase == BiomeBase.RAINFOREST) {
-	    l1 += k1 + 5;
-	}
-
-	if (biomebase == BiomeBase.SEASONAL_FOREST) {
-	    l1 += k1 + 2;
-	}
-
-	if (biomebase == BiomeBase.TAIGA) {
-	    l1 += k1 + 5;
-	}
-
-	if (biomebase == BiomeBase.DESERT) {
-	    l1 -= 20;
-	}
-
-	if (biomebase == BiomeBase.TUNDRA) {
-	    l1 -= 20;
-	}
-
-	if (biomebase == BiomeBase.PLAINS) {
-	    l1 -= 20;
-	}
-
-	int k2;
-
-	for (i2 = 0; i2 < l1; ++i2) {
-	    j2 = k + this.j.nextInt(16) + 8;
-	    k2 = l + this.j.nextInt(16) + 8;
-	    WorldGenerator worldgenerator = biomebase.a(this.j);
-
-	    worldgenerator.a(1.0D, 1.0D, 1.0D);
-	    worldgenerator.a(this.p, this.j, j2, this.p.getHighestBlockYAt(j2, k2), k2);
-	}
-
-	int l2;
-
-	for (i2 = 0; i2 < 2; ++i2) {
-	    j2 = k + this.j.nextInt(16) + 8;
-	    k2 = this.j.nextInt(128);
-	    l2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenFlowers(Block.YELLOW_FLOWER.id)).a(this.p, this.j, j2, k2, l2);
-	}
-
-	if (this.j.nextInt(2) == 0) {
-	    i2 = k + this.j.nextInt(16) + 8;
-	    j2 = this.j.nextInt(128);
-	    k2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenFlowers(Block.RED_ROSE.id)).a(this.p, this.j, i2, j2, k2);
-	}
-
-	if (this.j.nextInt(4) == 0) {
-	    i2 = k + this.j.nextInt(16) + 8;
-	    j2 = this.j.nextInt(128);
-	    k2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenFlowers(Block.BROWN_MUSHROOM.id)).a(this.p, this.j, i2, j2, k2);
-	}
-
-	if (this.j.nextInt(8) == 0) {
-	    i2 = k + this.j.nextInt(16) + 8;
-	    j2 = this.j.nextInt(128);
-	    k2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenFlowers(Block.RED_MUSHROOM.id)).a(this.p, this.j, i2, j2, k2);
-	}
-
-	for (i2 = 0; i2 < 10; ++i2) {
-	    j2 = k + this.j.nextInt(16) + 8;
-	    k2 = this.j.nextInt(128);
-	    l2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenReed()).a(this.p, this.j, j2, k2, l2);
-	}
-
-	if (this.j.nextInt(32) == 0) {
-	    i2 = k + this.j.nextInt(16) + 8;
-	    j2 = this.j.nextInt(128);
-	    k2 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenPumpkin()).a(this.p, this.j, i2, j2, k2);
-	}
-
-	i2 = 0;
-	if (biomebase == BiomeBase.DESERT) {
-	    i2 += 10;
-	}
-
-	int i3;
-
-	for (j2 = 0; j2 < i2; ++j2) {
-	    k2 = k + this.j.nextInt(16) + 8;
-	    l2 = this.j.nextInt(128);
-	    i3 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenCactus()).a(this.p, this.j, k2, l2, i3);
-	}
-
-	for (j2 = 0; j2 < 50; ++j2) {
-	    k2 = k + this.j.nextInt(16) + 8;
-	    l2 = this.j.nextInt(this.j.nextInt(120) + 8);
-	    i3 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenLiquids(Block.WATER.id)).a(this.p, this.j, k2, l2, i3);
-	}
-
-	for (j2 = 0; j2 < 20; ++j2) {
-	    k2 = k + this.j.nextInt(16) + 8;
-	    l2 = this.j.nextInt(this.j.nextInt(this.j.nextInt(112) + 8) + 8);
-	    i3 = l + this.j.nextInt(16) + 8;
-	    (new WorldGenLiquids(Block.LAVA.id)).a(this.p, this.j, k2, l2, i3);
-	}
-
-	this.w = this.p.getWorldChunkManager().a(this.w, k + 8, l + 8, 16, 16);
-
-	for (j2 = k + 8; j2 < k + 8 + 16; ++j2) {
-	    for (k2 = l + 8; k2 < l + 8 + 16; ++k2) {
-		l2 = j2 - (k + 8);
-		i3 = k2 - (l + 8);
-		int j3 = this.p.e(j2, k2);
-		double d1 = this.w[l2 * 16 + i3] - (double) (j3 - 64) / 64.0D
-			* 0.3D;
-
-		if (d1 < 0.5D && j3 > 0 && j3 < 128
-			&& this.p.isEmpty(j2, j3, k2)
-			&& this.p.getMaterial(j2, j3 - 1, k2).isSolid()
-			&& this.p.getMaterial(j2, j3 - 1, k2) != Material.ICE) {
-		    this.p.setTypeId(j2, j3, k2, Block.SNOW.id);
-		}
-	    }
-	}
-
-	Calendar calendar = Calendar.getInstance();
-
-	calendar.setTimeInMillis(System.currentTimeMillis());
-	if (calendar.get(2) == 3 && calendar.get(5) == 1) {
-	    k2 = k + this.j.nextInt(16) + 8;
-	    l2 = this.j.nextInt(128);
-	    i3 = l + this.j.nextInt(16) + 8;
-	    if (this.p.getTypeId(k2, l2, i3) == 0 && this.p.d(k2, l2 - 1, i3)) {
-		System.out.println("added a chest!!");
-		this.p.setTypeId(k2, l2, i3, Block.LOCKED_CHEST.id);
-	    }
-	}
-
-	BlockSand.a = false;
-    }
-
+	
     public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
 	return true;
     }
