@@ -244,7 +244,7 @@ public class SphereChunkProvider implements IChunkProvider {
 	this.a(i, j, abyte, this.v, adouble);
 	this.a(i, j, abyte, this.v);
 	this.u.a(this, this.p, i, j, abyte);
-
+	BlockSand.a = true;
 	boolean hassphere = false;
 	Spheres ts = new Spheres();
 	ts.GetSphereList().clear();
@@ -384,7 +384,7 @@ public class SphereChunkProvider implements IChunkProvider {
 	    } 
 	}
 	  
-	
+	BlockSand.a = false;
 	chunk.b();
 	plugin.oldchunks.AddChunkToList(SphereWorldConfig.world,i,j);
 	return chunk;

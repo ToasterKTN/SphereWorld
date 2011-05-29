@@ -22,7 +22,6 @@ import com.bukkit.toasterktn.SphereWorld.Player.SpherePlayerListener;
 // TODO Add bridges ( dobridges  / bridgetype )
 // TODO Other Shapes like Cubes ?
 // TODO Underwaterworld
-// TODO Glowblocks into Glass
 // TODO ..
 
 public class SphereWorld extends JavaPlugin {
@@ -32,7 +31,7 @@ public class SphereWorld extends JavaPlugin {
     // Spheres
     public Spheres spheres = new Spheres();
     public ChunckList oldchunks = new ChunckList();
-
+    public boolean isGenerating = false;
     private File chunkfile;
     private File speheresfile;
 
@@ -51,9 +50,17 @@ public class SphereWorld extends JavaPlugin {
 	// Create the pluginmanage pm.
 	SphereWorldConfig.initialize(getDataFolder());
 	// Force Worldload
-	if(getServer().getWorld(SphereWorldConfig.world) == null) 
+	if(getServer().getWorld(SphereWorldConfig.world) == null) {
 	    getServer().createWorld(SphereWorldConfig.world, Environment.NORMAL, SphereWorldConfig.worldseed);
+	}
 	// Get Chunk data
+	PluginManager pm = getServer().getPluginManager();
+	PluginDescriptionFile pdfFile = this.getDescription();
+	pm.registerEvent(Event.Type.BLOCK_PHYSICS, new SphereBlockListener(this), Event.Priority.Low, this);
+	pm.registerEvent(Event.Type.BLOCK_FROMTO, new SphereBlockListener(this), Event.Priority.Low, this);	
+	
+	this.isGenerating = true;
+	
 	chunkfile = new File(getDataFolder(), "chunklist.data");
 	oldchunks.ReadChunkList(chunkfile);
 	// Get / Create Sphere data
@@ -67,22 +74,26 @@ public class SphereWorld extends JavaPlugin {
 	    }
 	}
 	chunkListener = new ChunkListener(this);
+	this.isGenerating = false;
 
 	//Default Stuff
-	PluginManager pm = getServer().getPluginManager();
-	PluginDescriptionFile pdfFile = this.getDescription();
-	log.info("[SphereWorld] version " + pdfFile.getVersion()
-		+ " is enabled!");
-
+	
 	// Register a Chunk Creation, we may want to add a Cache
 	pm.registerEvent(Event.Type.CHUNK_LOAD, this.chunkListener, Event.Priority.Normal, this);
 	// Kill Players on Floor
 	if (SphereWorldConfig.killonfloor)
 	    pm.registerEvent(Event.Type.PLAYER_MOVE, new SpherePlayerListener(), Event.Priority.Normal, this);
+	// Protect Floor if needed
+	if (SphereWorldConfig.floorprotect) {
+	    pm.registerEvent(Event.Type.BLOCK_PLACE, new SphereBlockListener(this), Event.Priority.Low, this);
+	}
 	// Protect Blocks if needed
-	if (SphereWorldConfig.potprotect || SphereWorldConfig.sphereprotect)
+	if (SphereWorldConfig.potprotect || SphereWorldConfig.sphereprotect || SphereWorldConfig.floorprotect) {
 	    pm.registerEvent(Event.Type.BLOCK_BREAK, new SphereBlockListener(this), Event.Priority.Normal, this);
-	
+	}
+	log.info("[SphereWorld] version " + pdfFile.getVersion()
+		+ " is enabled!");
+
 	log.info("[SphereWorld] Loaded");
     }
 

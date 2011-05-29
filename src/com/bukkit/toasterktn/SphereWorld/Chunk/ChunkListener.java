@@ -36,24 +36,48 @@ public class ChunkListener extends WorldListener{
 		if (plugin.oldchunks.thisoldchunks.size() < 10) {
 		    System.out.println("First run..");
 		    System.out.print("working.. please wait.. this may take several minutes");
+		    try {
+		     	Thread.sleep(15000);
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
 		    Chunk chunks[] = world.getLoadedChunks();
 		    for(int ci = 0; ci < chunks.length; ci++)
 		    {
 		     Chunk c = chunks[ci];
-		     if (!plugin.oldchunks.isInChunkList(c)) {
-			 world.regenerateChunk(c.getX(),c.getZ());
-		     }
+		     world.regenerateChunk(c.getX(),c.getZ());
 		     if(ci % 50 == 0)
 		          System.gc();
 		    }
+		    try {
+		     	Thread.sleep(10000);
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
+		    chunks = null;
+		    chunks = world.getLoadedChunks();
+		    System.out.print("working.. Second pass");
 		    for(int ci = 0; ci < chunks.length; ci++)
 		    {
 		     Chunk c = chunks[ci];
-		     if (!plugin.oldchunks.isInChunkList(c)) {
-			 world.regenerateChunk(c.getX(),c.getZ());
-			 ((World)plugin.getServer().getWorlds().get(0)).unloadChunk(c.getX(), c.getZ());
-			 chunks[ci] = null;
-		     }
+		     world.regenerateChunk(c.getX(),c.getZ());
+		     if(ci % 50 == 0)
+		          System.gc();
+		    }
+		    try {
+		     	Thread.sleep(10000);
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
+		    chunks = null;
+		    chunks = world.getLoadedChunks();
+		    System.out.print("working.. Third pass");
+		    for(int ci = 0; ci < chunks.length; ci++)
+		    {
+		     Chunk c = chunks[ci];
+		     world.regenerateChunk(c.getX(),c.getZ());
+		     ((World)plugin.getServer().getWorlds().get(0)).unloadChunk(c.getX(), c.getZ());
+		     chunks[ci] = null;
 		     if(ci % 50 == 0)
 		          System.gc();
 		    }
