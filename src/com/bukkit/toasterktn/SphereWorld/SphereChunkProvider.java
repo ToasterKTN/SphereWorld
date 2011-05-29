@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.util.Vector;
 
+import com.bukkit.toasterktn.SphereWorld.Block.WorldGenLongGrass;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 
 import net.minecraft.server.BiomeBase;
@@ -634,41 +635,41 @@ public class SphereChunkProvider implements IChunkProvider {
 	        }
 
 	        
-	        // NO LONG GRASS TILL NOW
-//	        byte byte1 = 0;
-//	        if(jz1 == BiomeBase.FOREST)
-//	            byte1 = 2;
-//	        if(jz1 == BiomeBase.RAINFOREST)
-//	            byte1 = 10;
-//	        if(jz1 == BiomeBase.SEASONAL_FOREST)
-//	            byte1 = 2;
-//	        if(jz1 == BiomeBase.TAIGA)
-//	            byte1 = 1;
-//	        if(jz1 == BiomeBase.PLAINS)
-//	            byte1 = 10;
+	        // NO LONG GRASS TILL NOW , WE MUST MAKE IT OUR OWN
+	        byte byte1 = 0;
+	        if(jz1 == BiomeBase.FOREST)
+	            byte1 = 2;
+	        if(jz1 == BiomeBase.RAINFOREST)
+	            byte1 = 8;
+	        if(jz1 == BiomeBase.SEASONAL_FOREST)
+	            byte1 = 4;
+	        if(jz1 == BiomeBase.TAIGA)
+	            byte1 = 2;
+	        if(jz1 == BiomeBase.PLAINS)
+	            byte1 = 14;
 
-//	        for(int l15 = 0; l15 < byte1; l15++)
-//	        {
-//	            byte byte2 = 1;
-//	            if(jz1 == BiomeBase.RAINFOREST && j.nextInt(3) != 0)
-//	                byte2 = 2;
-//	            int l20 = k1 + j.nextInt(16) + 8;
-//	            int k23 = j.nextInt(128);
-//	            int j25 = l1 + j.nextInt(16) + 8;
-//	            (new Wo(un.Y.bn, byte2)).a(p, j, l20, k23, j25);
-//	        }
-	        // NO DEAD BUSHES...
-//	        byte1 = 0;
-//	        if(jz1 == BiomeBase.RAINFOREST)
-//	            byte1 = 2;
-//	    
-//	        for(int i16 = 0; i16 < byte1; i16++)
-//	        {
-//	            int i18 = k1 + j.nextInt(16) + 8;
-//	            int i21 = j.nextInt(128);
-//	            int l23 = l1 + j.nextInt(16) + 8;
-//	            (new kp(un.Z.bn)).a(p, j, i18, i21, l23);
-//	        }
+	        for(int l15 = 0; l15 < byte1; l15++)
+	        {
+	            byte byte2 = 1;
+	            if(jz1 == BiomeBase.RAINFOREST && j.nextInt(3) != 0)
+	                byte2 = 2;
+	            int l20 = k1 + j.nextInt(16) + 8;
+	            //int k23 = j.nextInt(128);
+	            int j25 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLongGrass(Block.LONG_GRASS.id, byte2)).a(p, j, l20, 0, j25);
+	        }
+	        // NO DEAD BUSHES..., WE MUST MAKE IT OURSELF
+	        byte1 = 0;
+	        if(jz1 == BiomeBase.TAIGA)
+	            byte1 = 2;
+	    
+	        for(int i16 = 0; i16 < byte1; i16++)
+	        {
+	            int i18 = k1 + j.nextInt(16) + 8;
+	            //int i21 = j.nextInt(128);
+	            int l23 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLongGrass(Block.DEAD_BUSH.id, byte1)).a(p, j, i18, 0, l23);
+	        }
 
 	        if(j.nextInt(2) == 0)
 	        {
