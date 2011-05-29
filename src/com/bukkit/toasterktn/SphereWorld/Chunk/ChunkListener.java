@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.server.IChunkProvider;
 
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Entity;
@@ -85,6 +86,26 @@ public class ChunkListener extends WorldListener{
 		    Entity e;
 		    for(Iterator<Entity> iterator = entities.iterator(); iterator.hasNext(); e.remove())
 			e = (Entity)iterator.next();
+		} else {
+		    // its a reload Check if we need to Fix floor
+		    if (SphereWorldConfig.usefloor && SphereWorldConfig.floorprotect) {
+			Chunk chunks[] = world.getLoadedChunks();
+			 for(int ci = 0; ci < chunks.length; ci++)
+			    {
+			     Chunk c = chunks[ci];
+			     for (int k = 0; k < 16; ++k) {
+				    for (int l = 0; l < 16; ++l) {
+					if (c.getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
+					    c.getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+					if (c.getBlock(k, 2, l).getType() != Material.AIR)
+					    c.getBlock(k, 1, l).setType(Material.AIR);
+				    }
+				}
+			     chunks[ci] = null;
+			     if(ci % 50 == 0)
+			          System.gc();
+			    }
+		    }
 		}
 	};
 	
@@ -95,9 +116,18 @@ public class ChunkListener extends WorldListener{
 		    if (SphereWorldConfig.world.equalsIgnoreCase(event.getWorld().getName())) {
 			    if (!plugin.oldchunks.isInChunkList(event.getChunk())) {
 				event.getWorld().regenerateChunk(event.getChunk().getX(), event.getChunk().getZ());
-				plugin.oldchunks.AddChunkToList(event.getChunk());	
+				//plugin.oldchunks.AddChunkToList(event.getChunk());	Unneeded it doubles List
 			   }
-			
+			    if (SphereWorldConfig.usefloor && SphereWorldConfig.floorprotect) {
+				for (int k = 0; k < 16; ++k) {
+				    for (int l = 0; l < 16; ++l) {
+					if (event.getChunk().getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
+					    event.getChunk().getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+					if (event.getChunk().getBlock(k, 2, l).getType() != Material.AIR)
+					    event.getChunk().getBlock(k, 1, l).setType(Material.AIR);
+				    }
+				}
+			    }
 		    }
 		}
 	}

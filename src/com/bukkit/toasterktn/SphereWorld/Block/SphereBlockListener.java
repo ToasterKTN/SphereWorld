@@ -76,17 +76,14 @@ public class SphereBlockListener extends BlockListener {
     public void onBlockPhysics(BlockPhysicsEvent event) {
 	if (event.isCancelled())
 	    return;
-	if (plugin.isGenerating)
+	if (plugin.isGenerating) {
 	    event.setCancelled(true);
+	    return;
+	}
 	if (SphereWorldConfig.floorprotect) {
 	    if (event.getBlock().getY() == 1) {
 		event.setCancelled(true);
-		try {
-		    event.getBlock().setType(Material.STATIONARY_WATER);
-		} catch (Exception e) {
-		   // That Suxs, but we ignore it
-		}
-		
+		event.getBlock().setType(Material.STATIONARY_WATER);
 	    }
 	}
     }
@@ -94,8 +91,10 @@ public class SphereBlockListener extends BlockListener {
     public void onBlockFromTo(BlockFromToEvent event) {
 	if (event.isCancelled())
 	    return;
-	if (plugin.isGenerating)
+	if (plugin.isGenerating) {
 	    event.setCancelled(true);
+	    return;
+	}
 	if (SphereWorldConfig.noice)
 	    if (event.getBlock().getY() < 5) 
 		if (event.getToBlock().getType() == Material.ICE) event.setCancelled(true);
