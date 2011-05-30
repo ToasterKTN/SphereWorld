@@ -28,7 +28,7 @@ public class ChunkListener extends WorldListener{
 		plugin = instance;
 		World world = plugin.getServer().getWorld(SphereWorldConfig.world); 
 		if (SphereWorldConfig.otherworld) {
-		    scp = new OtherWorldChunkProvider(((CraftWorld)world).getHandle(), 0L);
+		    scp = new OtherWorldChunkProvider(((CraftWorld)world).getHandle(), 0L, plugin);
 		} else {
 		    scp = new SphereChunkProvider(((CraftWorld)world).getHandle(), 0L, plugin.spheres, plugin);
 		}

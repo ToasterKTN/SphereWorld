@@ -27,6 +27,7 @@ import net.minecraft.server.WorldGenReed;
 import net.minecraft.server.WorldGenerator;
 
 public class OtherWorldChunkProvider implements IChunkProvider {
+    private SphereWorld plugin;
     private Random j;
     private NoiseGeneratorOctaves k;
     private NoiseGeneratorOctaves l;
@@ -51,7 +52,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
     int[][] i = new int[32][32];
     private double[] w;
 
-    public OtherWorldChunkProvider(World world, long i) {
+    public OtherWorldChunkProvider(World world, long i, SphereWorld instance) {
 	this.p = world;
 	this.j = new Random(i);
 	this.k = new NoiseGeneratorOctaves(this.j, 16);
@@ -62,6 +63,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 	this.a = new NoiseGeneratorOctaves(this.j, 10);
 	this.b = new NoiseGeneratorOctaves(this.j, 16);
 	this.c = new NoiseGeneratorOctaves(this.j, 8);
+	this.plugin = instance;
     }
 
     public void a(int i1, int j1, byte[] abyte0, BiomeBase[] abiomebase, double[] adouble) {
@@ -213,6 +215,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 			}
 		    } 
 		} 
+	plugin.oldchunks.AddChunkToList(SphereWorldConfig.world,i,j);
 	chunk.b();
 	return chunk;
     }
