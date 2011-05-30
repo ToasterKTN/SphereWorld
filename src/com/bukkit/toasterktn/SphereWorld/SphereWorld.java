@@ -19,6 +19,7 @@ import com.bukkit.toasterktn.SphereWorld.Chunk.ChunkListener;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 import com.bukkit.toasterktn.SphereWorld.Entity.SphereEntityListener;
 import com.bukkit.toasterktn.SphereWorld.Player.SpherePlayerListener;
+import com.bukkit.toasterktn.SphereWorld.Thread.SphereWorldSaveThread;
 
 // TODO Add bridges ( dobridges  / bridgetype )
 // TODO Other Shapes like Cubes ?
@@ -33,7 +34,7 @@ public class SphereWorld extends JavaPlugin {
     public Spheres spheres = new Spheres();
     public ChunckList oldchunks = new ChunckList();
     public boolean isGenerating = false;
-    private File chunkfile;
+    public File chunkfile;
     private File speheresfile;
 
     public static final Logger log = Logger.getLogger("Minecraft");
@@ -95,6 +96,10 @@ public class SphereWorld extends JavaPlugin {
 	
 	if (SphereWorldConfig.nofloorspawn) {
 	    pm.registerEvent(Event.Type.CREATURE_SPAWN, new SphereEntityListener(), Event.Priority.Normal, this);
+	}
+	// Initialize Autosave
+	if (SphereWorldConfig.autosavechunklist) {
+	    getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SphereWorldSaveThread(this),1200 * SphereWorldConfig.autosaveinterval, 1200 * SphereWorldConfig.autosaveinterval);
 	}
 	log.info("[SphereWorld] version " + pdfFile.getVersion()
 		+ " is enabled!");

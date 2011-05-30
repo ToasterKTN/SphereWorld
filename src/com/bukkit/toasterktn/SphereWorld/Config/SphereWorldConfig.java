@@ -29,6 +29,8 @@ public class SphereWorldConfig {
 	public static boolean floorprotect;
 	public static boolean nowater;
 	public static boolean nofloorspawn;
+	public static boolean autosavechunklist;
+	public static int autosaveinterval;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -65,6 +67,8 @@ public class SphereWorldConfig {
 	     	floorprotect = config.getBoolean("floorprotect", false);
 	     	nowater = config.getBoolean("nowater", true);
 	     	nofloorspawn = config.getBoolean("nofloorspawn", true);
+	     	autosavechunklist = config.getBoolean("autosavechunklist", true);
+	     	autosaveinterval = config.getInt("autosaveinterval", 30);
 	     	config.save();
 	    }
 }

@@ -122,7 +122,6 @@ public class ChunkListener extends WorldListener{
 		    if (SphereWorldConfig.world.equalsIgnoreCase(event.getWorld().getName())) {
 			    if (!plugin.oldchunks.isInChunkList(event.getChunk())) {
 				event.getWorld().regenerateChunk(event.getChunk().getX(), event.getChunk().getZ());
-				//plugin.oldchunks.AddChunkToList(event.getChunk());	Unneeded it doubles List
 			   }
 			    if (SphereWorldConfig.usefloor && SphereWorldConfig.floorprotect) {
 				for (int k = 0; k < 16; ++k) {
