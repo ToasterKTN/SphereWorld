@@ -95,10 +95,16 @@ public class ChunkListener extends WorldListener{
 			     Chunk c = chunks[ci];
 			     for (int k = 0; k < 16; ++k) {
 				    for (int l = 0; l < 16; ++l) {
-					if (c.getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
-					    c.getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+					if (!SphereWorldConfig.nowater) {
+					    if (c.getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
+						c.getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+						
+				    	} else {
+				    	 if (c.getBlock(k, 1, l).getType() != Material.AIR)
+						c.getBlock(k, 1, l).setType(Material.AIR);
+				    	}
 					if (c.getBlock(k, 2, l).getType() != Material.AIR)
-					    c.getBlock(k, 1, l).setType(Material.AIR);
+						c.getBlock(k, 2, l).setType(Material.AIR);
 				    }
 				}
 			     chunks[ci] = null;
@@ -121,10 +127,15 @@ public class ChunkListener extends WorldListener{
 			    if (SphereWorldConfig.usefloor && SphereWorldConfig.floorprotect) {
 				for (int k = 0; k < 16; ++k) {
 				    for (int l = 0; l < 16; ++l) {
-					if (event.getChunk().getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
-					    event.getChunk().getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+					if (!SphereWorldConfig.nowater) {
+					    if (event.getChunk().getBlock(k, 1, l).getType() != Material.STATIONARY_WATER)
+					  	 event.getChunk().getBlock(k, 1, l).setType(Material.STATIONARY_WATER);
+					} else {
+					    if (event.getChunk().getBlock(k, 1, l).getType() != Material.AIR)
+						    event.getChunk().getBlock(k, 1, l).setType(Material.AIR);  
+					}
 					if (event.getChunk().getBlock(k, 2, l).getType() != Material.AIR)
-					    event.getChunk().getBlock(k, 1, l).setType(Material.AIR);
+					    event.getChunk().getBlock(k, 2, l).setType(Material.AIR);
 				    }
 				}
 			    }

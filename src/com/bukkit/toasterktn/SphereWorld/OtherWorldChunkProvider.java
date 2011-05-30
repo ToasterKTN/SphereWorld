@@ -201,11 +201,15 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 		 for (int k = 0; k < 16; ++k) {
 			for (int l = 0; l < 16; ++l) {
 			   int k1 = 1;
-			   	int l1 = (l * 16 + k) * 128 + k1;
-				abyte[l1] = (byte) 9;
-				k1 = 0;
-				l1 = (l * 16 + k) * 128 + k1;
-				abyte[l1] = (byte) 7;
+			   int l1 = (l * 16 + k) * 128 + k1;
+			   if (!SphereWorldConfig.nowater) {
+			       abyte[l1] = (byte) 9;
+			   } else {
+			       abyte[l1] = (byte) 0; 
+			   }
+			   k1 = 0;
+			   l1 = (l * 16 + k) * 128 + k1;
+			   abyte[l1] = (byte) 7;
 			}
 		    } 
 		} 
@@ -523,7 +527,6 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 	                    p.setTypeId(i19, k24, l21, Block.SNOW.id);
 	            }
 	        }
-
 	        BlockSand.a = false;
 	    }
 

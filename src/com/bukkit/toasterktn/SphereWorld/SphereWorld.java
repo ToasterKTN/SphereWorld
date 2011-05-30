@@ -17,6 +17,7 @@ import com.bukkit.toasterktn.SphereWorld.Block.SphereBlockListener;
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunckList;
 import com.bukkit.toasterktn.SphereWorld.Chunk.ChunkListener;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
+import com.bukkit.toasterktn.SphereWorld.Entity.SphereEntityListener;
 import com.bukkit.toasterktn.SphereWorld.Player.SpherePlayerListener;
 
 // TODO Add bridges ( dobridges  / bridgetype )
@@ -90,6 +91,10 @@ public class SphereWorld extends JavaPlugin {
 	// Protect Blocks if needed
 	if (SphereWorldConfig.potprotect || SphereWorldConfig.sphereprotect || SphereWorldConfig.floorprotect) {
 	    pm.registerEvent(Event.Type.BLOCK_BREAK, new SphereBlockListener(this), Event.Priority.Normal, this);
+	}
+	
+	if (SphereWorldConfig.nofloorspawn) {
+	    pm.registerEvent(Event.Type.CREATURE_SPAWN, new SphereEntityListener(), Event.Priority.Normal, this);
 	}
 	log.info("[SphereWorld] version " + pdfFile.getVersion()
 		+ " is enabled!");

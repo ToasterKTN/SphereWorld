@@ -366,7 +366,11 @@ public class SphereChunkProvider implements IChunkProvider {
 		for (int l = 0; l < 16; ++l) {
 		   int k1 = 1;
 		   	int l1 = (l * 16 + k) * 128 + k1;
-			abyte[l1] = (byte) 9;
+		   	if (!SphereWorldConfig.nowater) {
+		   	    abyte[l1] = (byte) 9; 
+		   	} else {
+		   	    abyte[l1] = (byte) 0; 
+		   	} 
 			k1 = 0;
 			l1 = (l * 16 + k) * 128 + k1;
 			abyte[l1] = (byte) 7;

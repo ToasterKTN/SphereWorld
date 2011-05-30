@@ -107,10 +107,10 @@ public class SphereBlockListener extends BlockListener {
 		event.setCancelled(true);
 		return;
 	    }
-	    if (SphereWorldConfig.noice)
-		if (event.getBlock().getY() < 5)
-		    if (event.getToBlock().getType() == Material.ICE)
-			event.setCancelled(true);
+	    // if (SphereWorldConfig.onice)
+	    //	if (event.getBlock().getY() < 5)
+	    //	    if (event.getToBlock().getType() == Material.ICE)
+	    //	event.setCancelled(true);
 	    if (SphereWorldConfig.floorprotect) {
 		if (event.getToBlock().getY() == 1) {
 		    event.setCancelled(true);

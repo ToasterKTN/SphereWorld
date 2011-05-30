@@ -27,7 +27,8 @@ public class SphereWorldConfig {
 	public static boolean potprotect;
 	public static boolean sphereprotect;
 	public static boolean floorprotect;
-	public static boolean noice;
+	public static boolean nowater;
+	public static boolean nofloorspawn;
 	
 	public static void initialize(File dataFolder) {
 		
@@ -62,7 +63,8 @@ public class SphereWorldConfig {
 	     	potprotect = config.getBoolean("potprotect", true);
 	     	sphereprotect = config.getBoolean("sphereprotect", false);
 	     	floorprotect = config.getBoolean("floorprotect", false);
-	     	noice = config.getBoolean("noice", true);
+	     	nowater = config.getBoolean("nowater", true);
+	     	nofloorspawn = config.getBoolean("nofloorspawn", true);
 	     	config.save();
 	    }
 }
