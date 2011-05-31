@@ -2,6 +2,8 @@ package com.bukkit.toasterktn.SphereWorld;
 
 import java.util.Random;
 
+import com.bukkit.toasterktn.SphereWorld.Block.WorldGenGrass;
+import com.bukkit.toasterktn.SphereWorld.Block.WorldGenLongGrass;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 
 import net.minecraft.server.BiomeBase;
@@ -515,6 +517,39 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 	            (new WorldGenLiquids(Block.LAVA.id)).a(p, j, k21, i23, i24);
 	        }
 
+	        // Generate some Grass Blocks and some Longgrass
+	        byte byte1 = 0;
+	        if(jz1 == BiomeBase.FOREST)
+	            byte1 = 2;
+	        if(jz1 == BiomeBase.RAINFOREST)
+	            byte1 = 8;
+	        if(jz1 == BiomeBase.SEASONAL_FOREST)
+	            byte1 = 4;
+	        if(jz1 == BiomeBase.TAIGA)
+	            byte1 = 2;
+	        if(jz1 == BiomeBase.PLAINS)
+	            byte1 = 14;
+
+	        for(int l15 = 0; l15 < byte1; l15++)
+	        {
+	            int l20 = k1 + j.nextInt(16) + 8;
+	            //int k23 = j.nextInt(128);
+	            int j25 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenGrass(Block.GRASS.id)).a(p, j, l20, 0, j25);
+	        }
+	        
+	        for(int l15 = 0; l15 < byte1; l15++)
+	        {
+	            byte byte2 = 1;
+	            if(jz1 == BiomeBase.RAINFOREST && j.nextInt(3) != 0)
+	                byte2 = 2;
+	            int l20 = k1 + j.nextInt(16) + 8;
+	            //int k23 = j.nextInt(128);
+	            int j25 = l1 + j.nextInt(16) + 8;
+	            (new WorldGenLongGrass(Block.LONG_GRASS.id, byte2)).a(p, j, l20, 0, j25);
+	        }
+	        
+	        
 	        w = p.getWorldChunkManager().a(w, k1 + 8, l1 + 8, 16, 16);
 	        for(int i19 = k1 + 8; i19 < k1 + 8 + 16; i19++)
 	        {
