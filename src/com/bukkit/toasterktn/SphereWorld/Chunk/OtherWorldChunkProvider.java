@@ -1,7 +1,8 @@
-package com.bukkit.toasterktn.SphereWorld;
+package com.bukkit.toasterktn.SphereWorld.Chunk;
 
 import java.util.Random;
 
+import com.bukkit.toasterktn.SphereWorld.SphereWorld;
 import com.bukkit.toasterktn.SphereWorld.Block.WorldGenGrass;
 import com.bukkit.toasterktn.SphereWorld.Block.WorldGenLongGrass;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;

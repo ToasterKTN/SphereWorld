@@ -15,8 +15,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.ChunkLoadEvent;
 
-import com.bukkit.toasterktn.SphereWorld.SphereChunkProvider;
-import com.bukkit.toasterktn.SphereWorld.OtherWorldChunkProvider;
 import com.bukkit.toasterktn.SphereWorld.SphereWorld;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 

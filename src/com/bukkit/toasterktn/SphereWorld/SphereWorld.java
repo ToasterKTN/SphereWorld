@@ -95,8 +95,13 @@ public class SphereWorld extends JavaPlugin {
 	}
 	
 	if (SphereWorldConfig.nofloorspawn) {
-	    pm.registerEvent(Event.Type.CREATURE_SPAWN, new SphereEntityListener(), Event.Priority.Normal, this);
+	    pm.registerEvent(Event.Type.CREATURE_SPAWN, new SphereEntityListener(this), Event.Priority.Normal, this);
 	}
+	
+	if (SphereWorldConfig.potprotect || SphereWorldConfig.sphereprotect ) {
+	    pm.registerEvent(Event.Type.ENTITY_EXPLODE, new SphereEntityListener(this), Event.Priority.Normal, this);
+	}
+	
 	// Initialize Autosave
 	if (SphereWorldConfig.autosavechunklist) {
 	    getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SphereWorldSaveThread(this),1200 * SphereWorldConfig.autosaveinterval, 1200 * SphereWorldConfig.autosaveinterval);

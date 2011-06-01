@@ -1,4 +1,4 @@
-package com.bukkit.toasterktn.SphereWorld;
+package com.bukkit.toasterktn.SphereWorld.Chunk;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -6,6 +6,9 @@ import java.util.Random;
 
 import org.bukkit.util.Vector;
 
+import com.bukkit.toasterktn.SphereWorld.Sphere;
+import com.bukkit.toasterktn.SphereWorld.SphereWorld;
+import com.bukkit.toasterktn.SphereWorld.Spheres;
 import com.bukkit.toasterktn.SphereWorld.Block.WorldGenLongGrass;
 import com.bukkit.toasterktn.SphereWorld.Config.SphereWorldConfig;
 
