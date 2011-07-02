@@ -244,11 +244,11 @@ public class SphereChunkProvider implements IChunkProvider {
 	byte[] abyte = new byte['\u8000'];
 	Chunk chunk = new Chunk(this.p, abyte, i, j);
 	this.v = this.p.getWorldChunkManager().a(this.v, i * 16, j * 16, 16, 16);
-	double[] adouble = this.p.getWorldChunkManager().a;
+	double[] adouble = this.p.getWorldChunkManager().rain;
 	this.a(i, j, abyte, this.v, adouble);
 	this.a(i, j, abyte, this.v);
 	this.u.a(this, this.p, i, j, abyte);
-	BlockSand.a = true;
+	BlockSand.instaFall = true;
 	boolean hassphere = false;
 	Spheres ts = new Spheres();
 	ts.GetSphereList().clear();
@@ -392,8 +392,8 @@ public class SphereChunkProvider implements IChunkProvider {
 	    } 
 	}
 	  
-	BlockSand.a = false;
-	chunk.b();
+	BlockSand.instaFall = false;
+	chunk.initLighting();
 	plugin.oldchunks.AddChunkToList(SphereWorldConfig.world,i,j);
 	return chunk;
     }
@@ -404,8 +404,8 @@ public class SphereChunkProvider implements IChunkProvider {
 	            ad = new double[l1 * i2 * j2];
 	        double d1 = 684.41200000000003D;
 	        double d2 = 684.41200000000003D;
-	        double ad1[] = p.getWorldChunkManager().a;
-	        double ad2[] = p.getWorldChunkManager().b;
+	        double ad1[] = p.getWorldChunkManager().temperature;
+	        double ad2[] = p.getWorldChunkManager().rain;
 	        g = a.a(g, i1, k1, l1, j2, 1.121D, 1.121D, 0.5D);
 	        h = b.a(h, i1, k1, l1, j2, 200D, 200D, 0.5D); 
 	        d = m.a(d, i1, j1, k1, l1, i2, j2, d1 / 80D, d2 / 160D, d1 / 80D);
@@ -491,7 +491,7 @@ public class SphereChunkProvider implements IChunkProvider {
     }
 
     public void getChunkAt(IChunkProvider cj1, int i1, int j1) {
-		BlockSand.a = true;
+		BlockSand.instaFall = true;
 		int k1 = i1 * 16;
 	        int l1 = j1 * 16;
 	        BiomeBase jz1 = this.p.getWorldChunkManager().getBiome(k1 + 16, l1 + 16);
@@ -751,14 +751,14 @@ public class SphereChunkProvider implements IChunkProvider {
 	                int j26 = j23 - (l1 + 8);
 	                int k26 = p.e(j20, j23);
 	                double d2 = w[i25 * 16 + j26] - ((double)(k26 - 64) / 64D) * 0.29999999999999999D;
-	                if(d2 < 0.5D && k26 > 0 && k26 < 128 && p.d(j20, k26, j23) && 
+	                if(d2 < 0.5D && k26 > 0 && k26 < 128 && p.e(j20, k26, j23) && 
 	                	p.getMaterial(j20, k26 - 1, j23).isSolid() && 
 	                	p.getMaterial(j20, k26 - 1, j23) != Material.ICE)
 	                    p.setTypeId(j20, k26, j23, Block.SNOW.id);
 	            }
 
 	        }
-	        BlockSand.a = false;
+	        BlockSand.instaFall = false;
 	    }
 	
     public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
@@ -772,4 +772,10 @@ public class SphereChunkProvider implements IChunkProvider {
     public boolean b() {
 	return true;
     }
+
+	@Override
+	public boolean canSave() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
