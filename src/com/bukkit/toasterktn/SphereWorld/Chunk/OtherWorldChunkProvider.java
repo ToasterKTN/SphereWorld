@@ -196,7 +196,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 
 	this.v = this.p.getWorldChunkManager().a(this.v, i * 16, j * 16, 16, 16);
 	this.v = this.p.getWorldChunkManager().a(this.v, i * 16, j * 16, 16, 16);
-	double[] adouble = this.p.getWorldChunkManager().a;
+	double[] adouble = this.p.getWorldChunkManager().rain;
 
 	this.a(i, j, abyte, this.v, adouble);
 	this.a(i, j, abyte, this.v);
@@ -219,7 +219,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 		    } 
 		} 
 	plugin.oldchunks.AddChunkToList(SphereWorldConfig.world,i,j);
-	chunk.b();
+	chunk.initLighting();
 	return chunk;
     }
 
@@ -229,8 +229,8 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 	            ad = new double[l1 * i2 * j2];
 	        double d1 = 684.41200000000003D;
 	        double d2 = 684.41200000000003D;
-	        double ad1[] = p.getWorldChunkManager().a;
-	        double ad2[] = p.getWorldChunkManager().b;
+	        double ad1[] = p.getWorldChunkManager().temperature;
+	        double ad2[] = p.getWorldChunkManager().rain;
 	        g = a.a(g, i1, k1, l1, j2, 1.121D, 1.121D, 0.5D);
 	        h = b.a(h, i1, k1, l1, j2, 200D, 200D, 0.5D);
 	        d1 *= 2D;
@@ -315,7 +315,7 @@ public class OtherWorldChunkProvider implements IChunkProvider {
     }
 
     public void getChunkAt(IChunkProvider cj1, int i1, int j1) {
-	BlockSand.a = true;
+	BlockSand.instaFall = true;
 	      int k1 = i1 * 16;
 	        int l1 = j1 * 16;
 	        BiomeBase jz1 = this.p.getWorldChunkManager().getBiome(k1 + 16, l1 + 16);
@@ -560,13 +560,13 @@ public class OtherWorldChunkProvider implements IChunkProvider {
 	                int j24 = l21 - (l1 + 8);
 	                int k24 = p.e(i19, l21);
 	                double d2 = w[j23 * 16 + j24] - ((double)(k24 - 64) / 64D) * 0.29999999999999999D;
-	                if(d2 < 0.5D && k24 > 0 && k24 < 128 && p.d(i19, k24, l21) 
+	                if(d2 < 0.5D && k24 > 0 && k24 < 128 && p.e(i19, k24, l21) 
 	                	&& p.getMaterial(i19, k24 - 1, l21).isSolid() 
 	                	&& p.getMaterial(i19, k24 - 1, l21) != Material.ICE)
 	                    p.setTypeId(i19, k24, l21, Block.SNOW.id);
 	            }
 	        }
-	        BlockSand.a = false;
+	        BlockSand.instaFall = false;
 	    }
 
     public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
@@ -580,4 +580,8 @@ public class OtherWorldChunkProvider implements IChunkProvider {
     public boolean b() {
 	return true;
     }
+
+	public boolean canSave() {
+		return false;
+	}
 }
